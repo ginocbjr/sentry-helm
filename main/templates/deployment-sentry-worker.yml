@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sentry-worker
+  namespace: {{ .Values.namespace }}
+spec:
+  selector:
+    matchLabels:
+      tier: worker
+      app: sentry-worker
+  replicas: {{ .Values.workerReplicas }}
+  revisionHistoryLimit: 0
+  template:
+    metadata:
+      labels:
+        tier: worker
+        app: sentry-worker
+    spec:
+      containers:
+        - name: sentry-worker
+          image: sentry:9.0-onbuild
+{{ include "sentry.deploymentEnv" . | indent 10}}
+          resources:
+{{ toYaml .Values.workerResources | indent 12 }}
+          volumeMounts:
+            - mountPath: "/var/lib/sentry/files"
+              name: sentry-files
+          command: ["/entrypoint.sh"]
+          args: ["run", "worker"]
+      volumes:
+        - name: sentry-files
+          persistentVolumeClaim:
+            claimName: sentry-files-disk

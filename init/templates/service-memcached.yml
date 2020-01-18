@@ -1,0 +1,13 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: service-sentry-memcached
+  namespace: {{ .Values.namespace }}
+spec:
+  type: NodePort
+  selector:
+    app: sentry-memcached
+  ports:
+    - protocol: TCP
+      port: 11211
+      targetPort: 11211

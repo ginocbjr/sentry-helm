@@ -1,0 +1,15 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: service-sentry-web
+  namespace: {{ .Values.namespace }}
+  annotations:
+    service.beta.kubernetes.io/azure-load-balancer-internal: "true"
+spec:
+  type: LoadBalancer
+  selector:
+    app: sentry-web
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: http

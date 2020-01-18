@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sentry-web
+  namespace: {{ .Values.namespace }}
+spec:
+  selector:
+    matchLabels:
+      tier: web
+      app: sentry-web
+  replicas: {{ .Values.webReplicas }}
+  revisionHistoryLimit: 0
+  template:
+    metadata:
+      labels:
+        tier: web
+        app: sentry-web
+    spec:
+      containers:
+        - name: sentry-web
+          image: sentry:9.0-onbuild
+{{ include "sentry.deploymentEnv" . | indent 10}}
+          resources:
+{{ toYaml .Values.webResources | indent 12 }}
+          ports:
+            - name: http
+              containerPort: 9000
+          volumeMounts:
+            - mountPath: "/var/lib/sentry/files"
+              name: sentry-files
+      volumes:
+        - name: sentry-files
+          persistentVolumeClaim:
+            claimName: sentry-files-disk

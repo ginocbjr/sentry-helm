@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sentry-memcached
+  namespace: {{ .Values.namespace }}
+spec:
+  selector:
+    matchLabels:
+      tier: database
+      app: sentry-memcached
+  replicas: {{ .Values.memcachedReplica }}
+  revisionHistoryLimit: 0
+  template:
+    metadata:
+      labels:
+        tier: database
+        app: sentry-memcached
+    spec:
+      containers:
+        - name: sentry-memcached
+          image: memcached:1.5-alpine
+          ports:
+            - containerPort: 11211
+          resources:
+{{ toYaml .Values.memcachedResources | indent 12 }}

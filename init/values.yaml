@@ -1,0 +1,31 @@
+namespace: sentry
+
+filesDiskSize: 10Gi
+
+# Postgres Settings
+postgresReplica: 1
+pgDiskSize: 10Gi
+postgresResources:
+  limits:
+    memory: "1000Mi"
+    cpu: "0.5"
+  requests:
+    memory: "500Mi"
+
+# Redis Settings
+redisReplicas: 1
+redisResources:
+  limits:
+    memory: "500Mi"
+    cpu: "0.25"
+  requests:
+    memory: "400Mi"
+
+# Memcached Settings
+memcachedReplica: 1
+memcachedResources:
+  limits:
+    memory: "500Mi"
+    cpu: "0.25"
+  requests:
+    memory: "400Mi"

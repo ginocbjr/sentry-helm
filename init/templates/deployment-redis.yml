@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sentry-redis
+  namespace: {{ .Values.namespace }}
+spec:
+  selector:
+    matchLabels:
+      tier: database
+      app: sentry-redis
+  replicas: {{ .Values.redisReplicas }}
+  revisionHistoryLimit: 0
+  template:
+    metadata:
+      labels:
+        tier: database
+        app: sentry-redis
+    spec:
+      containers:
+        - name: sentry-redis
+          image: redis:3.2-alpine
+          ports:
+            - containerPort: 6379
+          resources:
+{{ toYaml .Values.redisResources | indent 12 }}

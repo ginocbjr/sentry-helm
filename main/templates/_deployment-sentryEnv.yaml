@@ -1,0 +1,32 @@
+{{- define "sentry.deploymentEnv" -}}
+env:
+  - name: SENTRY_MEMCACHED_HOST
+    value: sentry-memcached
+  - name: SENTRY_REDIS_HOST
+    value: service-sentry-redis
+  - name: SENTRY_POSTGRES_HOST
+    value: service-sentry-pg
+  - name: SENTRY_SERVER_EMAIL
+    value: {{ .Values.emailFrom }}
+  - name: SENTRY_EMAIL_HOST
+    value: {{ .Values.emailHost }}
+  - name: SENTRY_EMAIL_PORT
+    value: "{{ .Values.emailPort }}"
+  - name: SENTRY_EMAIL_USE_TLS
+    value: "{{ .Values.useTls }}"
+  - name: SENTRY_EMAIL_USER
+    valueFrom:
+      secretKeyRef:
+        name: sentry-secret
+        key: sentry_mail_username
+  - name: SENTRY_EMAIL_PASSWORD
+    valueFrom:
+      secretKeyRef:
+        name: sentry-secret
+        key: sentry_mail_password
+  - name: SENTRY_SECRET_KEY
+    valueFrom:
+      secretKeyRef:
+        name: sentry-secret
+        key: sentry_secret_key
+{{- end -}}

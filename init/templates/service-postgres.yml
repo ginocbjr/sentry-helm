@@ -1,0 +1,15 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: service-sentry-pg
+  namespace: {{ .Values.namespace }}
+  annotations:
+    service.beta.kubernetes.io/azure-load-balancer-internal: "true"
+spec:
+  type: LoadBalancer
+  selector:
+    app: sentry-postgres
+  ports:
+    - protocol: TCP
+      port: 5432
+      targetPort: 5432

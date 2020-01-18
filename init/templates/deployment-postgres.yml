@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sentry-postgres
+  namespace: {{ .Values.namespace }}
+spec:
+  selector:
+    matchLabels:
+      tier: database
+      app: sentry-postgres
+  replicas: {{ .Values.postgresReplica }}
+  revisionHistoryLimit: 0
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        tier: database
+        app: sentry-postgres
+    spec:
+      containers:
+        - name: sentry-postgres
+          image: postgres:9.5
+          ports:
+            - containerPort: 5432
+          resources:
+{{ toYaml .Values.postgresResources | indent 12 }}
+          volumeMounts:
+            - mountPath: "/var/lib/postgresql/data"
+              name: sentry-pg
+              subPath: postgres
+      volumes:
+        - name: sentry-pg
+          persistentVolumeClaim:
+            claimName: sentry-pg-pvc

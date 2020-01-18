@@ -1,0 +1,66 @@
+namespace: sentry
+secretKey: eiZjNGg5bmN5eD0zOHNkJmhfZnEmXmkrZ3chcipzaThuZyh0d3JuJSFzNzkhNXM3dCo=
+
+# cron settings
+cronResources:
+  limits:
+    memory: "500Mi"
+    cpu: "0.25"
+  requests:
+    memory: "400Mi"
+
+# web settings
+webReplicas: 1
+webResources:
+  limits:
+    memory: "500Mi"
+    cpu: "0.25"
+  requests:
+    memory: "400Mi"
+
+# worker settings
+workerReplicas: 1
+workerResources:
+  limits:
+    memory: "1000Mi"
+    cpu: "0.25"
+  requests:
+    memory: "400Mi"
+
+# Email settings
+emailFrom: hello@mysentry.com
+emailHost: smtp.sendgrid.net
+emailPort: '587'
+useTls: 'true'
+mailUsername:
+mailPassword:
+
+filesDiskSize: 10Gi
+
+# Postgres Settings
+postgresReplica: 1
+pgDiskSize: 10Gi
+postgresResources:
+  limits:
+    memory: "1000Mi"
+    cpu: "0.5"
+  requests:
+    memory: "500Mi"
+
+# Redis Settings
+redisReplicas: 1
+redisResources:
+  limits:
+    memory: "500Mi"
+    cpu: "0.25"
+  requests:
+    memory: "400Mi"
+
+# Memcached Settings
+memcachedReplica: 1
+memcachedResources:
+  limits:
+    memory: "500Mi"
+    cpu: "0.25"
+  requests:
+    memory: "400Mi"

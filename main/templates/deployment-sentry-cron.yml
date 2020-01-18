@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sentry-cron
+  namespace: {{ .Values.namespace }}
+spec:
+  selector:
+    matchLabels:
+      tier: cron
+      app: sentry-cron
+  replicas: {{ .Values.cronReplicas }}
+  revisionHistoryLimit: 0
+  template:
+    metadata:
+      labels:
+        tier: cron
+        app: sentry-cron
+    spec:
+      containers:
+        - name: sentry-cron
+          image: sentry:9.0-onbuild
+{{ include "sentry.deploymentEnv" . | indent 10}}
+          resources:
+{{ toYaml .Values.cronResources | indent 12 }}
+          command: ["/entrypoint.sh"]
+          args: ["run", "cron"]
+          volumeMounts:
+            - mountPath: "/var/lib/sentry/files"
+              name: sentry-files
+      volumes:
+        - name: sentry-files
+          persistentVolumeClaim:
+            claimName: sentry-files-disk
